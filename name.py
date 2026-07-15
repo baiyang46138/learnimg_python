@@ -18,6 +18,19 @@
 # print(f_l.rstrip())
 # print(f_l.lstrip())
 # print(f_l.strip())删除空格
-url='https://nostarch.com'
-print(url.removeprefix('https://'))
-import this
+# url='https://nostarch.com'
+# print(url.removeprefix('https://'))
+# import this
+from name_test import get_formatted_name
+
+while True:
+    first_name=input("Enter your first name: ")
+    if first_name.lower()=="q":
+        break
+    last_name=input("Enter your last name: ")
+    if last_name.lower()=="q":
+        break
+
+    format_name=get_formatted_name(first_name,last_name)
+    print(format_name)
+

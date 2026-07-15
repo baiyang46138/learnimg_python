@@ -1,4 +1,4 @@
-from pathlib import Path
+# from pathlib import Path
 import json
 #
 # path=Path('file_pi.txt')
@@ -18,9 +18,9 @@ import json
 # print(content)
 
 # number=[2,3,5,7,11,13]
-path=Path('file_pi.txt')
+# path=Path('file_pi.txt')
 # content=json.dumps(number)
 # path.write_text(content)
-content=path.read_text()
-numbers=json.loads(content)
-print(numbers)
+# content=path.read_text()
+# numbers=json.loads(content)
+# print(numbers)
