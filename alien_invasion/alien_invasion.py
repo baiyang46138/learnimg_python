@@ -2,6 +2,8 @@ import  sys
 import pygame
 from setting import Setting
 from ship import Ship
+from bullet import Bullet
+from typing import cast
 
 class AlienInvasion:
     """管理游戏资源和行为的类"""
@@ -13,8 +15,8 @@ class AlienInvasion:
         self.setting = Setting()
 
         #创建窗口
-        self.screen = pygame.display.set_mode(
-            (self.setting.screen_width,self.setting.screen_height))
+        self.screen = pygame.display.set_mode((self.setting.screen_width,self.setting.screen_height))
+
         pygame.display.set_caption("Alien Invasion")
 
         # 禁用输入法
@@ -26,6 +28,7 @@ class AlienInvasion:
             self.hwnd = hwnd
 
         self.ship = Ship(self)
+        self.bullets = pygame.sprite.Group()
 
 
     def run_game(self):
@@ -34,8 +37,18 @@ class AlienInvasion:
             #监听键盘和鼠标事件
             self._check_events()
             self.ship.update()
+            self._update_bullets()
             self._update_screen()
             self.clock.tick(60)
+
+
+    def _update_bullets(self):
+        """更新子弹的位置并删除已消失的子弹"""
+        self.bullets.update()
+        # 删除消失的子弹
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
 
 
     def _check_events(self):
@@ -44,6 +57,9 @@ class AlienInvasion:
             #退出程序
             if event.type == pygame.QUIT:
                 sys.exit()
+            #发射子弹
+            elif event.type == pygame.KEYDOWN:
+                self._check_events_keydown(event)
             #飞船移动
         keys = pygame.key.get_pressed()
         self.ship.moving_right = keys[pygame.K_d]
@@ -52,14 +68,26 @@ class AlienInvasion:
         self.ship.moving_down = keys[pygame.K_s]
 
 
+    def _check_events_keydown(self,event):
+        if event.key == pygame.K_ESCAPE:
+            sys.exit()
+        if event.key == pygame.K_SPACE:
+            self._fire_bullet()
+
     # def _check_events_keydown(self,event):
-    # def _check_events_keydown(self,event):
+
+    def _fire_bullet(self):
+        """创建一颗子弹并加入编组"""
+        new_bullet = Bullet(self)
+        self.bullets.add(new_bullet)  # type: ignore
 
 
 
     def _update_screen(self):
         # 每次循环都重绘屏幕
         self.screen.fill(self.setting.bg_color)
+        for bullet in self.bullets.sprites():
+            bullet.draw_bullet()  # type: ignore
         self.ship.blitme()
 
         # 让最近绘制的屏幕可见
