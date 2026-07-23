@@ -1,10 +1,11 @@
 import pygame
-import setting
+from pygame.sprite import Sprite
 
-class Ship:
+class Ship(Sprite):
     """管理飞船的类"""
     def __init__(self,ai_game):
         """初始化飞船并设置其初始位置"""
+        super().__init__()
         self.screen = ai_game.screen
         self.screen_rect = ai_game.screen.get_rect()
         self.setting = ai_game.setting
@@ -44,4 +45,11 @@ class Ship:
         if self.moving_down and self.rect.bottom < self.screen_rect.height:
             self.y += self.setting.ship_speed
         self.rect.y = self.y
+
+
+    def center_ship(self):
+        """将飞船放在屏幕底部中间"""
+        self.rect.midbottom = self.screen_rect.midbottom
+        self.x = float(self.rect.x)
+        self.y = float(self.rect.y)
 
